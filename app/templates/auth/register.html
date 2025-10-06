@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="form-box">
+        <h2>Welcome to the future of connectivity</h2>
+        <div class="tabs">
+            <a href="{{ url_for('auth.login') }}" class="tab">Login</a>
+            <a href="{{ url_for('auth.register') }}" class="tab active">Register</a>
+        </div>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.first_name(class_="input-field", placeholder="First Name") }}
+            {{ form.last_name(class_="input-field", placeholder="Last Name") }}
+            {{ form.email(class_="input-field", placeholder="Email") }}
+            {{ form.password(class_="input-field", placeholder="Password") }}
+            {{ form.confirm_password(class_="input-field", placeholder="Confirm Password") }}
+            {{ form.submit(class_="btn") }}
+        </form>
+    </div>
+</div>
+</body>
+</html>

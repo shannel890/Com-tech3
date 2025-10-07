@@ -47,19 +47,30 @@ tailwind.config = {
             <p class="text-gray-500">Connect with your team and start collaborating.</p>
         </div>
         <form method="POST" action="{{ url_for('dashboard.create_group') }}" class="space-y-6">
+            {{ form.hidden_tag() }}  <!-- For CSRF protection -->
+
             <div>
-                <label for="name" class="block mb-2 text-sm font-medium text-gray-600">Group Name</label>
-                <input type="text" name="name" id="name" class="input input-bordered w-full" required>
+                {{ form.name.label(class="block mb-2 text-sm font-medium text-gray-600") }}
+                {{ form.name(class="input input-bordered w-full") }}
+                {% for error in form.name.errors %}
+                    <p class="text-red-500 text-sm">{{ error }}</p>
+                {% endfor %}
             </div>
+
             <div>
-                <label for="description" class="block mb-2 text-sm font-medium text-gray-600">Description</label>
-                <textarea name="description" id="description" class="textarea textarea-bordered w-full" rows="3"></textarea>
+                {{ form.description.label(class="block mb-2 text-sm font-medium text-gray-600") }}
+                {{ form.description(class="textarea textarea-bordered w-full", rows="3") }}
+                {% for error in form.description.errors %}
+                    <p class="text-red-500 text-sm">{{ error }}</p>
+                {% endfor %}
             </div>
+
             <div class="flex items-center justify-between">
                 <a href="{{ url_for('dashboard.index') }}" class="text-sm font-medium text-primary-600 hover:underline">Cancel</a>
-                <button type="submit" class="btn btn-primary">Create Group</button>
+                {{ form.submit(class="btn btn-primary") }}
             </div>
         </form>
+
     </div>
 </div>
 {% endblock %}

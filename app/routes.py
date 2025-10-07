@@ -1,8 +1,9 @@
-from flask import Blueprint,render_template,jsonify, request
-from flask_login import login_required
+from flask import Blueprint,render_template,jsonify, request, flash, url_for, redirect
+from flask_login import login_required, current_user
 from app.models.message import Message
 from app.models.group import Group
 from app.form import MessageForm
+from app.extension import db
 
 main = Blueprint('main',__name__)
 
@@ -42,3 +43,4 @@ def group_chat(group_id):
     form = MessageForm()
 
     return render_template('group_chat.html', group=group, messages=messages, form=form)
+

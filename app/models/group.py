@@ -6,7 +6,8 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
     description = db.Column(db.Text, nullable=True)
-
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    owner = db.relationship('User', backref='groups')
     memberships = db.relationship('Membership', back_populates='group', cascade="all, delete-orphan")
     messages = db.relationship('Message', back_populates='group', cascade="all, delete-orphan")
     meetings = db.relationship('Meeting', back_populates='group', cascade="all, delete-orphan")

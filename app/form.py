@@ -1,4 +1,4 @@
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, TextAreaField,IntegerField
 from flask_babel import lazy_gettext as _l
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length, Email, EqualTo
@@ -20,3 +20,8 @@ class LoginForm(FlaskForm):
 class MessageForm(FlaskForm):
     content = StringField("Message", validators=[DataRequired(), Length(max=500)])
     submit = SubmitField("Send")
+
+class GroupForm(FlaskForm):
+    name = StringField('Group Name', validators=[DataRequired(), Length(max=100)])
+    description = TextAreaField('Description', validators=[Length(max=300)])
+    submit = SubmitField('Create Group')

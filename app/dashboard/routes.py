@@ -5,7 +5,7 @@ from app.models.message import Message
 from app.models.membership import Membership
 from app.models.user import User
 from app.extension import db
-
+from app.form import GroupForm
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
@@ -32,6 +32,7 @@ def view_group(group_id):
 @dashboard.route('/create_group', methods=['GET', 'POST'])
 @login_required
 def create_group():
+    form = GroupForm()  # ✅ create form instance
     if request.method == 'POST':
         group_name = request.form.get('name')
         group_description = request.form.get('description')
@@ -45,7 +46,7 @@ def create_group():
             db.session.commit()
             flash('Group created successfully!', 'success')
             return redirect(url_for('dashboard.index'))
-    return render_template('dashboard/create_group.html', user=current_user)
+    return render_template('dashboard/create_group.html', form=form, user=current_user)
 
 @dashboard.route('/call')
 @login_required

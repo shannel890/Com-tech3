@@ -65,13 +65,13 @@ tailwind.config = {
                 <h3 class="px-2 mb-3 text-xs uppercase tracking-wide text-base-content/60 font-semibold">Main</h3>
                 <ul class="menu space-y-1 rounded-box">
                     <li>
-                        <a class="active">
+                        <a href="{{ url_for('dashboard.index') }}">
                             <i class="fas fa-comments mr-2 text-sm"></i>
                             Messages
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url_for('dashboard.contacts') }}">
+                        <a class="active">
                             <i class="fas fa-users mr-2 text-sm"></i>
                             Contacts
                         </a>
@@ -113,42 +113,42 @@ tailwind.config = {
             </label>
             <div class="flex-1 relative max-w-md mx-4">
                 <div class="form-control">
-                    <input type="text" placeholder="Search groups or members..." id="searchInput" class="input input-bordered w-full" />
+                    <input type="text" placeholder="Search contacts..." id="searchInput" class="input input-bordered w-full" />
                     <label class="label absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 pointer-events-none">
                         <i class="fas fa-search text-sm"></i>
                     </label>
                 </div>
             </div>
             <div class="flex gap-2">
-                <a href="{{ url_for('dashboard.call') }}" class="btn btn-ghost btn-circle" title="Video Call">
+                <button class="btn btn-ghost btn-circle" title="Video Call">
                     <i class="fas fa-video text-xl"></i>
-                </a>
-                <a href="{{ url_for('dashboard.call') }}" class="btn btn-ghost btn-circle" title="Audio Call">
+                </button>
+                <button class="btn btn-ghost btn-circle" title="Audio Call">
                     <i class="fas fa-phone text-xl"></i>
-                </a>
+                </button>
             </div>
         </header>
 
         <section class="flex-1 overflow-y-auto p-8 bg-base-100">
             <div class="text-center mb-8 animate-fade-in-down">
-                <h2 class="text-3xl text-base-content font-bold mb-2">Welcome, {{ user.name }}</h2>
-                <p class="text-base-content/60 text-lg">Select a group to view messages or create a new one.</p>
+                <h2 class="text-3xl text-base-content font-bold mb-2">Contacts</h2>
+                <p class="text-base-content/60 text-lg">Browse and manage your contacts.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
-                {% for group in groups %}
+                {% for contact in users %}
                 <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow duration-300 border border-base-200">
                     <div class="card-body items-center text-center p-6">
                         <div class="avatar">
                             <div class="w-16 rounded-full bg-primary/10 flex items-center justify-center font-bold text-lg text-primary">
-                                {{ group.name[0] | upper }}
+                                {{ contact.name[0] | upper }}
                             </div>
                         </div>
-                        <h2 class="card-title text-base-content font-semibold mt-4 mb-2">{{ group.name }}</h2>
-                        <p class="text-base-content/60 text-sm mb-6 min-h-[2rem] leading-relaxed">{{ group.description or "No description" }}</p>
+                        <h2 class="card-title text-base-content font-semibold mt-4 mb-2">{{ contact.name }}</h2>
+                        <p class="text-base-content/60 text-sm mb-6 min-h-[2rem] leading-relaxed">{{ contact.email }}</p>
                         <div class="card-actions justify-center">
-                            <a href="{{ url_for('dashboard.view_group', group_id=group.id) }}" class="btn btn-primary px-6 py-2 text-sm font-semibold">
-                                Open Chat
+                            <a href="{{ url_for('dashboard.profile', user_id=contact.id) }}" class="btn btn-primary px-6 py-2 text-sm font-semibold">
+                                View Profile
                             </a>
                         </div>
                     </div>

@@ -1,4 +1,23 @@
-com-tech3/
-.env
-__pyacache__
-shannel/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+*.venv
+
+# Instance folder
+instance/
+
+# Log files
+*.log
+
+# IDE files
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db

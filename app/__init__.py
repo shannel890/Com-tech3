@@ -38,10 +38,6 @@ def create_app():
     app.register_blueprint(api, url_prefix="/api")
     app.register_blueprint(dashboard)
 
-    # Database setup
-    with app.app_context():
-        db.create_all()
-
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))

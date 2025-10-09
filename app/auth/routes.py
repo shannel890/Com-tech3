@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from app.form import RegistrationForm, LoginForm
 from app.models.user import User
 from app.extension import db
-from flask_login import login_user
+from flask_login import login_user, logout_user
 auth = Blueprint('auth',__name__,url_prefix='/auth')
 
 
@@ -33,18 +33,29 @@ def register():
                     flash(f'Error in {field}: {error}', 'danger')
     return render_template('auth/register.html', form=form)
 
-@auth.route('/login', methods=['GET','POST'])
+import logging
+
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and user.verify_password(form.password.data):
-            login_user(user, remember=form.remember.data)
-            flash('Login successful!', 'success')
-            return redirect(url_for('dashboard.index'))
+        logging.info(f"Attempting login for user: {form.email.data}")
+        if user:
+            logging.info(f"User found: {user.email}")
+            if user.verify_password(form.password.data):
+                login_user(user, remember=form.remember.data)
+                flash('Login successful!', 'success')
+                logging.info("Login successful.")
+                return redirect(url_for('dashboard.index'))
+            else:
+                logging.warning("Password verification failed.")
+        else:
+            logging.warning("User not found.")
         flash('Login failed. Please check your email and password.', 'danger')
     return render_template('auth/login.html', form=form)
 
 @auth.route('/logout')
 def logout():
+    logout_user()
     return redirect(url_for('main.landing_page'))

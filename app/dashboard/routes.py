@@ -5,7 +5,7 @@ from app.models.message import Message
 from app.models.membership import Membership
 from app.models.user import User
 from app.extension import db
-from app.form import GroupForm
+from app.form import GroupForm, MessageForm
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
@@ -22,12 +22,18 @@ def contacts():
     groups = Group.query.all()
     return render_template('dashboard/contacts.html', users=users, groups=groups, user=current_user)
 
-@dashboard.route('/group/<int:group_id>')
+@dashboard.route('/group/<int:group_id>', methods=['GET', 'POST'])
 @login_required
 def view_group(group_id):
     group = Group.query.get_or_404(group_id)
+    form = MessageForm()
+    if form.validate_on_submit():
+        message = Message(content=form.content.data, group_id=group_id, user_id=current_user.id)
+        db.session.add(message)
+        db.session.commit()
+        return redirect(url_for('dashboard.view_group', group_id=group_id))
     messages = Message.query.filter_by(group_id=group.id).order_by(Message.timestamp.asc()).all()
-    return render_template('group_chat.html',group=group, messages=messages, user=current_user)
+    return render_template('group_chat.html', group=group, messages=messages, form=form, user=current_user)
 
 @dashboard.route('/create_group', methods=['GET', 'POST'])
 @login_required
@@ -48,10 +54,11 @@ def create_group():
             return redirect(url_for('dashboard.index'))
     return render_template('dashboard/create_group.html', form=form, user=current_user)
 
-@dashboard.route('/call')
+@dashboard.route('/group/<int:group_id>/call')
 @login_required
-def call():
-    return render_template('dashboard/call.html', user=current_user)
+def group_call(group_id):
+    group = Group.query.get_or_404(group_id)
+    return render_template('dashboard/call.html', group=group, user=current_user)
 
 @dashboard.route('/profile/<int:user_id>')
 @login_required

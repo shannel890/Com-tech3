@@ -119,14 +119,6 @@ tailwind.config = {
                     </label>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <a href="{{ url_for('dashboard.call') }}" class="btn btn-ghost btn-circle" title="Video Call">
-                    <i class="fas fa-video text-xl"></i>
-                </a>
-                <a href="{{ url_for('dashboard.call') }}" class="btn btn-ghost btn-circle" title="Audio Call">
-                    <i class="fas fa-phone text-xl"></i>
-                </a>
-            </div>
         </header>
 
         <section class="flex-1 overflow-y-auto p-8 bg-base-100">
@@ -146,9 +138,12 @@ tailwind.config = {
                         </div>
                         <h2 class="card-title text-base-content font-semibold mt-4 mb-2">{{ group.name }}</h2>
                         <p class="text-base-content/60 text-sm mb-6 min-h-[2rem] leading-relaxed">{{ group.description or "No description" }}</p>
-                        <div class="card-actions justify-center">
-                            <a href="{{ url_for('dashboard.view_group', group_id=group.id) }}" class="btn btn-primary px-6 py-2 text-sm font-semibold">
-                                Open Chat
+                        <div class="card-actions justify-center gap-2">
+                            <a href="{{ url_for('dashboard.view_group', group_id=group.id) }}" class="btn btn-outline btn-sm">
+                                <i class="fas fa-comment-dots"></i> Chat
+                            </a>
+                             <a href="{{ url_for('dashboard.group_call', group_id=group.id) }}" class="btn btn-outline btn-sm">
+                                <i class="fas fa-video"></i> Call
                             </a>
                         </div>
                     </div>

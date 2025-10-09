@@ -1,8 +1,6 @@
 from flask import Blueprint,render_template,jsonify, request, flash, url_for, redirect
 from flask_login import login_required, current_user
 from app.models.message import Message
-from app.models.group import Group
-from app.form import MessageForm
 from app.extension import db
 
 main = Blueprint('main',__name__)
@@ -35,12 +33,4 @@ def get_messages(group_id):
         'pages': pagination.pages
     })
 
-@main.route('/group/<int:group_id>/chat', methods=['GET', 'POST'])
-@login_required
-def group_chat(group_id):
-    group = Group.query.get_or_404(group_id)
-    messages = Message.query.filter_by(group_id=group_id).order_by(Message.timestamp.asc()).all()
-    form = MessageForm()
-
-    return render_template('group_chat.html', group=group, messages=messages, form=form)
 

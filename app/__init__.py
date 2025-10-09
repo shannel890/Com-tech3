@@ -1,22 +1,27 @@
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
+
 from flask import Flask
 from app.extension import db, login_manager, migrate, babel, csrf
 from app.models.user import User
 from app.auth.routes import auth
 from app.routes import main
-from dotenv import load_dotenv
 from config import Config
 from flask_socketio import SocketIO
 from app.sockets import register_socketio_events
 from app.api.routes import api
 from app.dashboard.routes import dashboard
 
-load_dotenv()
-
 # --- Initialize extensions globally
 socketio = SocketIO(cors_allowed_origins="*")
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, instance_path=os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'instance')))
     app.config.from_object(Config)
 
     # Initialize extensions

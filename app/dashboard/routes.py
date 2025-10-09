@@ -27,7 +27,7 @@ def contacts():
 def view_group(group_id):
     group = Group.query.get_or_404(group_id)
     messages = Message.query.filter_by(group_id=group.id).order_by(Message.timestamp.asc()).all()
-    return render_template('dashboard/group_chat.html', group=group, messages=messages, user=current_user)
+    return render_template('group_chat.html',group=group, messages=messages, user=current_user)
 
 @dashboard.route('/create_group', methods=['GET', 'POST'])
 @login_required

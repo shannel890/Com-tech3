@@ -15,6 +15,7 @@ venv/
 shannel
 env/
 ENV/
+test_env/
 
 # Instance folder
 instance/

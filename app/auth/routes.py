@@ -3,6 +3,8 @@ from app.form import RegistrationForm, LoginForm
 from app.models.user import User
 from app.extension import db
 from flask_login import login_user, logout_user
+import logging
+
 auth = Blueprint('auth',__name__,url_prefix='/auth')
 
 
@@ -11,6 +13,12 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         try:
+            # Check if user already exists
+            existing_user = User.query.filter_by(email=form.email.data).first()
+            if existing_user:
+                flash('Email already registered. Please use a different email.', 'danger')
+                return render_template('auth/register.html', form=form)
+            
             new_user = User(
                 first_name=form.first_name.data,
                 last_name=form.last_name.data,
@@ -22,8 +30,7 @@ def register():
             flash('Registration successful!', 'success')
             return redirect(url_for('auth.login'))
         except Exception as e:
-            import logging
-            logging.basicConfig(filename='flask_app.log', level=logging.ERROR)
+            db.session.rollback()
             logging.error(f'Exception during registration: {e}', exc_info=True)
             flash('An error occurred during registration. Please try again later.', 'danger')
     else:
@@ -33,7 +40,6 @@ def register():
                     flash(f'Error in {field}: {error}', 'danger')
     return render_template('auth/register.html', form=form)
 
-import logging
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():

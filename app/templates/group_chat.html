@@ -115,6 +115,7 @@
   <div class="chat-container">
     <div class="chat-header">
       {{ group.name }}
+      <a href="{{ url_for('dashboard.add_member', group_id=group.id) }}" class="btn btn-primary btn-sm float-end">Add Member</a>
     </div>
 
     <div id="chat-box" class="chat-box">

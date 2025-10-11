@@ -5,7 +5,7 @@ from app.models.message import Message
 from app.models.membership import Membership
 from app.models.user import User
 from app.extension import db
-from app.form import GroupForm, MessageForm
+from app.form import GroupForm, MessageForm, AddMemberForm
 
 dashboard = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
@@ -70,3 +70,21 @@ def group_call(group_id):
 def profile(user_id):
     user = User.query.get_or_404(user_id)
     return render_template('dashboard/profile.html', user=user)
+
+@dashboard.route('/group/<int:group_id>/add_member', methods=['GET', 'POST'])
+@login_required
+def add_member(group_id):
+    group = Group.query.get_or_404(group_id)
+    form = AddMemberForm()
+    if form.validate_on_submit():
+        identifier = form.identifier.data
+        user = User.query.filter((User.email == identifier) | (User.phone_number == identifier)).first()
+        if user:
+            membership = Membership(user_id=user.id, group_id=group.id)
+            db.session.add(membership)
+            db.session.commit()
+            flash('Member added successfully!', 'success')
+            return redirect(url_for('dashboard.view_group', group_id=group_id))
+        else:
+            flash('User not found.', 'danger')
+    return render_template('dashboard/add_member.html', form=form, group=group, user=current_user)

@@ -7,6 +7,7 @@ class RegistrationForm(FlaskForm):
     first_name = StringField(_l('First Name'), validators=[DataRequired()])
     last_name = StringField(_l('Last Name'), validators=[DataRequired()])
     email = StringField(_l('Email'), validators=[DataRequired(), Email()])
+    phone_number = StringField(_l('Phone Number'))
     password = PasswordField(_l('Password'), validators=[DataRequired()])
     confirm_password = PasswordField(_l('Confirm Password'), validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField(_l('Register'))
@@ -26,3 +27,6 @@ class GroupForm(FlaskForm):
     description = TextAreaField('Description', validators=[Length(max=300)])
     submit = SubmitField('Create Group')
 
+class AddMemberForm(FlaskForm):
+    identifier = StringField('Email or Phone Number', validators=[DataRequired()])
+    submit = SubmitField('Add Member')
